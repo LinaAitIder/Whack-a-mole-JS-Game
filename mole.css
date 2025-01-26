@@ -5,6 +5,7 @@ body{
   font-weight: 200px;
   background : url("./assets/Grass.jpg");
   color : white;
+
 }
 
 img{
@@ -30,12 +31,13 @@ img{
   height:50px;
   background: url("assets/hole.png");
   background-size: cover;
-
 }
 
 #board div img{
   width:90px;
   padding-bottom:10px ;
+ 
+
 
 }
 
@@ -85,4 +87,3 @@ img{
 .playBtn:hover {
   cursor:pointer;
 }
-

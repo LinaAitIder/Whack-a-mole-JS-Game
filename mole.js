@@ -1,5 +1,7 @@
 
 let currentMole;
+let score = 0;
+let gameOver = false;
 // Initiale Window
 window.onload = function(){
  let initialWindow=document.createElement("div");
@@ -29,13 +31,13 @@ window.onload = function(){
 
 function initiateGame(){
   createBoard();
-  setInterval(randomMoleDisplay,2000);  
+  setInterval(randomMoleDisplay,1000);  
+ // displayresultWindow();
 }
 
 function createBoard(){
 
   let boardDiv = document.getElementById("board");
-
   for(let i=0;i<3;i++){
     let childDiv = document.createElement("div");
     childDiv.id = i.toString();
@@ -54,10 +56,18 @@ let randomMoleDisplay = ()=>{
 
   moleImg.src="assets/mole.png";
   
-  currentMole=document.getElementById(randomDivId); currentMole.appendChild(moleImg);
+  currentMole=document.getElementById(randomDivId); 
+  currentMole.appendChild(moleImg);
+  moleImg.addEventListener("click", selectTile)
 }
 
 function randomId(){
   let randomNum=Math.floor(Math.random()*3);
   return randomNum.toString();
 }
+
+function selectTile(){
+  score +=10;
+  document.getElementById("score").innerText=score.toString();
+}
+
