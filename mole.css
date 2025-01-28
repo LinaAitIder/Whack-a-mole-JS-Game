@@ -17,7 +17,6 @@ img{
  -webkit-user-drag: none;
 }
 
-
 #board{
   width: 400px;
   height: 400px; 
@@ -41,8 +40,6 @@ img{
   width:95px;
   padding-bottom:40px ;
 }
-
-
 
 .rightTree {
   width : 200px;
@@ -91,9 +88,6 @@ img{
   cursor:pointer;
 }
 
-
-
-
 .cursor{
   height : 50px;
   width: 50px !important;
@@ -110,4 +104,10 @@ img{
 
 .active {
   transform: rotate(45deg);
+}
+
+.dizzyMole{
+  width:125px;
+  height:60px;
+
 }

@@ -33,7 +33,7 @@ window.onload = function(){
 function initiateGame(){
   document.body.style.cursor="none";
   createBoard();
-  setInterval(randomMoleDisplay,1000);  
+  setInterval(randomMoleDisplay,2000);  
  // displayresultWindow();
 }
 
@@ -63,9 +63,14 @@ let randomMoleDisplay = ()=>{
   if (currentMole.childElementCount==1){
     moleImg.addEventListener("click", selectMole);
   }
- 
+  setTimeout(removeMole,1000)
+
 }
 
+function removeMole(){
+  currentMole.innerHTML="";
+
+}
 //Generating random number
 function randomId(){
   let randomNum=Math.floor(Math.random()*3);
@@ -74,8 +79,16 @@ function randomId(){
 
 //Selecting the mole
 function selectMole(){
+
   score +=10;
   document.getElementById("score").innerText=score.toString();
+  currentMole.innerHTML="";
+  let dizzyMoleImg =document.createElement('img');
+  dizzyMoleImg.src="assets/moleAttacked.png";
+  dizzyMoleImg.className="dizzyMole";
+  currentMole.appendChild(dizzyMoleImg);
+
+ 
 }
 
 //Verify we can get to the cursor element
