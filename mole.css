@@ -5,13 +5,16 @@ body{
   font-weight: 200px;
   background : url("./assets/Grass.jpg");
   color : white;
-  
+  -webkit-user-select: none;
+  -ms-user-select:none;
+  user-select: none;
 }
 
 
 img{
  width : 200px;
  height : auto ;
+ -webkit-user-drag: none;
 }
 
 
