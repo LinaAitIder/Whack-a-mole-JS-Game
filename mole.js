@@ -45,7 +45,7 @@ function initiateGame(){
   startAudio.play();
   document.body.style.cursor="none";
   createBoard();
-  refreshIntervalId = setInterval(countDownTimer, 1000);
+  setInterval(countDownTimer, 1000);
   setInterval(randomMoleDisplay,2000);  
 }
 
@@ -125,9 +125,10 @@ function selectMole(){
 
 }
 
+//selecting the champ
 function selectChamp(){
   if(score == 0){
-    gameOver();
+    displayGameOverWin();
   } else {
     lostAudio.play();
     score -= 10;
@@ -137,7 +138,7 @@ function selectChamp(){
 }
 
 //gameOver function
-function gameOver(){
+function displayGameOverWin(){
     gameOverAudio.play();
     let gameOverWindow = document.createElement("div");
     gameOverWindow.className="gameOverWindow";
@@ -165,6 +166,34 @@ function gameOver(){
     clearInterval(refreshIntervalId);
 }
 
+//
+function displayFinalWin(){
+  gameOverAudio.play();
+  let gameOverWindow = document.createElement("div");
+  gameOverWindow.className="gameOverWindow";
+  gameOverWindow.style.display="flex";
+  gameOverWindow.style.transition="4s";
+
+  let gameOverDiv = document.createElement("div");
+  gameOverDiv.style.display="flex";
+  gameOverDiv.style.flexDirection="column";
+  gameOverDiv.style.gap="10px"
+
+  gameOverDiv.innerHTML = `<h1>You've Hit ${score/10} Moles!</h1>`;
+  gameOverDiv.innerHTML += "<button class='backBtn'>Back</button>";
+
+  
+  gameOverWindow.appendChild(gameOverDiv);
+  document.body.appendChild(gameOverWindow);
+
+  let backBtn = document.querySelector('.backBtn');
+  backBtn.addEventListener("click",()=>{
+    location.reload();
+  });
+
+  //Reinitiate Timer
+  clearInterval(refreshIntervalId);
+}
 //Verify we can get to the cursor element
 if(!cursor){
   console.log("cursor element not detected");
@@ -183,7 +212,7 @@ window.addEventListener('mouseup', ()=>{
   cursor.classList.remove('active');
 })
 
-//Managing Audio 
+//Managing Audio , additional effects for the right tree 
 let rightTree=document.querySelector('.rightTree');
 rightTree.addEventListener("mouseover",()=>{
   treeAudio.play();
@@ -204,8 +233,7 @@ function countDownTimer(){
   timer.innerHTML= `0${minutes}:${seconds}`;
   time--;
   if(seconds==0 && minutes==0){
-    gameOver();
-    //Final Window 
+    displayFinalWin();
   }
 }
 
