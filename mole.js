@@ -1,6 +1,8 @@
 // Some global variables
 let currentMole;
 let currentChamp;
+let moleNumScore;
+let bestScore;
 let score = 0;
 const startingMinutes= 1;
 let time =  startingMinutes*60;
@@ -140,6 +142,16 @@ function selectChamp(){
 
 //gameOver function
 function displayGameOverWin(){
+  bestScore=localStorage.getItem("bestScore");
+  moleNumScore = score/10;
+  if(bestScore=='undefined'){
+    bestScore = 0;
+  }
+
+  if(moleNumScore>bestScore){
+    localStorage.setItem("bestScore",moleNumScore);
+  }
+
     gameOverAudio.play();
     let gameOverWindow = document.createElement("div");
     gameOverWindow.className="gameOverWindow";
@@ -152,6 +164,8 @@ function displayGameOverWin(){
     gameOverDiv.style.gap="10px"
 
     gameOverDiv.innerHTML = "<h1>GAME OVER!</h1>";
+    gameOverDiv.innerHTML = `<h1>You've Hit ${moleNumScore} Moles!</h1>`;
+    gameOverDiv.innerHTML += `BEST SCORE : ${bestScore}`;
     gameOverDiv.innerHTML += "<button class='backBtn'>Back</button>";
 
     
@@ -169,12 +183,14 @@ function displayGameOverWin(){
 
 //display final window
 function displayFinalWin(){
-  let bestScore=localStorage.getItem("bestScore");
+  bestScore=localStorage.getItem("bestScore");
+  moleNumScore = score/10;
   if(bestScore=='undefined'){
     bestScore = 0;
   }
-  if(score>bestScore){
-    localStorage.setItem("bestScore",score);
+
+  if(moleNumScore>bestScore){
+    localStorage.setItem("bestScore",moleNumScore);
   }
 
   gameOverAudio.play();
@@ -188,7 +204,7 @@ function displayFinalWin(){
   gameOverDiv.style.flexDirection="column";
   gameOverDiv.style.gap="10px"
 
-  gameOverDiv.innerHTML = `<h1>You've Hit ${score/10} Moles!</h1>`;
+  gameOverDiv.innerHTML = `<h1>You've Hit ${moleNumScore} Moles!</h1>`;
   gameOverDiv.innerHTML += `BEST SCORE : ${bestScore}`;
   gameOverDiv.innerHTML += "<button class='backBtn'>Back</button>";
 
