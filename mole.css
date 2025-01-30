@@ -90,6 +90,7 @@ img{
     transform: rotate(0deg);
   }
 }
+
 .leftTree {
   width : 200px;
   height : auto ; 
@@ -167,5 +168,17 @@ img{
 .dizzyMole{
   width:125px;
   height:60px;
+}
+
+#timer{
+  height: 50px !important;
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%,0%); 
 
 }

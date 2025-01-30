@@ -2,11 +2,21 @@
 let currentMole;
 let currentChamp;
 let score = 0;
+const startingMinutes= 1;
+let time =  startingMinutes*60;
 const cursor = document.querySelector('.cursor');
+const timer = document.getElementById('timer');
+var startAudio = new Audio('assets/game-start.mp3');
+var gameOverAudio = new Audio('assets/game-over.mp3');
 var treeAudio = new Audio('assets/tree-shaking.wav');
+var trumphAudio = new Audio('assets/achievement.mp3');
+var lostAudio = new Audio('assets/lost.mp3');
+
+var refreshIntervalId ;
 
 // Initiate Window
 window.onload = function(){
+ 
  let initialWindow=document.createElement("div");
  let playBtn = document.createElement("btn");
  let  playText = document.createElement("p");
@@ -17,7 +27,7 @@ window.onload = function(){
   playText.style.padding = "10px";
 
   playBtn.className="playBtn";
-  playText.innerHTML ="PLAY <i class=\"bi bi-play-fill\"></i>";
+  playText.innerHTML ="PLAY ";
 
   playBtn.appendChild(playText);
   initialWindow.appendChild(playBtn)
@@ -32,8 +42,10 @@ window.onload = function(){
 
 //Initializing the game
 function initiateGame(){
+  startAudio.play();
   document.body.style.cursor="none";
   createBoard();
+  refreshIntervalId = setInterval(countDownTimer, 1000);
   setInterval(randomMoleDisplay,2000);  
 }
 
@@ -77,7 +89,7 @@ let randomMoleDisplay = ()=>{
     moleImg.addEventListener("click", selectMole);
   }
   if(currentChamp.childElementCount==1){
-    champImg.addEventListener("click", gameOver)
+    champImg.addEventListener("click", selectChamp)
   }
   setTimeout(removeMole,5000)
   setTimeout(removeChamp,5000)
@@ -108,12 +120,25 @@ function selectMole(){
   dizzyMoleImg.src="assets/moleAttacked.png";
   dizzyMoleImg.className="dizzyMole";
   currentMole.appendChild(dizzyMoleImg);
+  trumphAudio.play();
+
+
+}
+
+function selectChamp(){
+  if(score == 0){
+    gameOver();
+  } else {
+    lostAudio.play();
+    score -= 10;
+    document.getElementById("score").innerText="SCORE: "+score.toString();
+  }
 
 }
 
 //gameOver function
 function gameOver(){
-  if(score == 0){
+    gameOverAudio.play();
     let gameOverWindow = document.createElement("div");
     gameOverWindow.className="gameOverWindow";
     gameOverWindow.style.display="flex";
@@ -133,14 +158,11 @@ function gameOver(){
 
     let backBtn = document.querySelector('.backBtn');
     backBtn.addEventListener("click",()=>{
-      gameOverWindow.remove();  
+      location.reload();
     });
-   
-  } else {
-  score -= 10;
-  document.getElementById("score").innerText="SCORE: "+score.toString();
-  }
 
+    //Reinitiate Timer
+    clearInterval(refreshIntervalId);
 }
 
 //Verify we can get to the cursor element
@@ -166,3 +188,24 @@ let rightTree=document.querySelector('.rightTree');
 rightTree.addEventListener("mouseover",()=>{
   treeAudio.play();
 })
+
+//CountDown Timer
+function countDownTimer(){
+  const minutes=Math.floor(time/60);
+  let seconds = time % 60;
+  seconds = seconds<10 ? '0'+seconds : seconds;
+  timer.style.alignItems="center";
+  timer.style.backgroundColor="white";
+  timer.style.color="Black";
+  timer.style.borderRadius="20px";
+  timer.style.padding="10px";
+  timer.style.margin="10px";
+  timer.style.fontSize="20px";
+  timer.innerHTML= `0${minutes}:${seconds}`;
+  time--;
+  if(seconds==0 && minutes==0){
+    gameOver();
+    //Final Window 
+  }
+}
+
