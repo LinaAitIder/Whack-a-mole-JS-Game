@@ -1,8 +1,9 @@
 // Some global variables
 let currentMole;
+let currentChamp;
 let score = 0;
-let gameOver = false;
 const cursor = document.querySelector('.cursor');
+var treeAudio = new Audio('assets/tree-shaking.wav');
 
 // Initiate Window
 window.onload = function(){
@@ -16,7 +17,7 @@ window.onload = function(){
   playText.style.padding = "10px";
 
   playBtn.className="playBtn";
-  playText.innerHTML="PLAY"
+  playText.innerHTML ="PLAY <i class=\"bi bi-play-fill\"></i>";
 
   playBtn.appendChild(playText);
   initialWindow.appendChild(playBtn)
@@ -34,7 +35,6 @@ function initiateGame(){
   document.body.style.cursor="none";
   createBoard();
   setInterval(randomMoleDisplay,2000);  
- // displayresultWindow();
 }
 
 //Creating the board
@@ -52,24 +52,46 @@ let randomMoleDisplay = ()=>{
   if(currentMole){
     currentMole.innerHTML="";
   }
+  if(currentChamp){
+    currentChamp.innerHTML="";
+  }
   let moleImg = document.createElement("img");
-  let randomDivId = randomId();
+  let champImg = document.createElement("img")
+  let MoleDivId = randomId();
+  let ChampDivId = randomId();
+
 
   moleImg.src="assets/mole.png";
   moleImg.className="mole";
+  champImg.src="assets/champ.png"
+  champImg.className="champ";
   
-  currentMole=document.getElementById(randomDivId); 
-  currentMole.appendChild(moleImg);
+  currentMole=document.getElementById(MoleDivId); 
+  currentChamp=document.getElementById(ChampDivId);
+  if(MoleDivId != ChampDivId){
+    currentMole.appendChild(moleImg);
+    currentChamp.appendChild(champImg)
+  } 
+
   if (currentMole.childElementCount==1){
     moleImg.addEventListener("click", selectMole);
   }
-  setTimeout(removeMole,1000)
+  if(currentChamp.childElementCount==1){
+    champImg.addEventListener("click", gameOver)
+  }
+  setTimeout(removeMole,5000)
+  setTimeout(removeChamp,5000)
 
 }
 
+//Removing the moleImage
 function removeMole(){
   currentMole.innerHTML="";
 
+}
+
+function removeChamp(){
+  currentChamp.innerHTML="";
 }
 //Generating random number
 function randomId(){
@@ -79,16 +101,46 @@ function randomId(){
 
 //Selecting the mole
 function selectMole(){
-
   score +=10;
-  document.getElementById("score").innerText=score.toString();
+  document.getElementById("score").innerText="SCORE: "+score.toString();
   currentMole.innerHTML="";
   let dizzyMoleImg =document.createElement('img');
   dizzyMoleImg.src="assets/moleAttacked.png";
   dizzyMoleImg.className="dizzyMole";
   currentMole.appendChild(dizzyMoleImg);
 
- 
+}
+
+//gameOver function
+function gameOver(){
+  if(score == 0){
+    let gameOverWindow = document.createElement("div");
+    gameOverWindow.className="gameOverWindow";
+    gameOverWindow.style.display="flex";
+    gameOverWindow.style.transition="4s";
+
+    let gameOverDiv = document.createElement("div");
+    gameOverDiv.style.display="flex";
+    gameOverDiv.style.flexDirection="column";
+    gameOverDiv.style.gap="10px"
+
+    gameOverDiv.innerHTML = "<h1>GAME OVER!</h1>";
+    gameOverDiv.innerHTML += "<button class='backBtn'>Back</button>";
+
+    
+    gameOverWindow.appendChild(gameOverDiv);
+    document.body.appendChild(gameOverWindow);
+
+    let backBtn = document.querySelector('.backBtn');
+    backBtn.addEventListener("click",()=>{
+      gameOverWindow.remove();  
+    });
+   
+  } else {
+  score -= 10;
+  document.getElementById("score").innerText="SCORE: "+score.toString();
+  }
+
 }
 
 //Verify we can get to the cursor element
@@ -107,4 +159,10 @@ window.addEventListener('mousedown' , ()=>{
 })
 window.addEventListener('mouseup', ()=>{
   cursor.classList.remove('active');
+})
+
+//Managing Audio 
+let rightTree=document.querySelector('.rightTree');
+rightTree.addEventListener("mouseover",()=>{
+  treeAudio.play();
 })
