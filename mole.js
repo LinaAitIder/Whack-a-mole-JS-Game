@@ -11,8 +11,9 @@ var gameOverAudio = new Audio('assets/game-over.mp3');
 var treeAudio = new Audio('assets/tree-shaking.wav');
 var trumphAudio = new Audio('assets/achievement.mp3');
 var lostAudio = new Audio('assets/lost.mp3');
-
 var refreshIntervalId ;
+
+
 
 // Initiate Window
 window.onload = function(){
@@ -166,8 +167,16 @@ function displayGameOverWin(){
     clearInterval(refreshIntervalId);
 }
 
-//
+//display final window
 function displayFinalWin(){
+  let bestScore=localStorage.getItem("bestScore");
+  if(bestScore=='undefined'){
+    bestScore = 0;
+  }
+  if(score>bestScore){
+    localStorage.setItem("bestScore",score);
+  }
+
   gameOverAudio.play();
   let gameOverWindow = document.createElement("div");
   gameOverWindow.className="gameOverWindow";
@@ -180,6 +189,7 @@ function displayFinalWin(){
   gameOverDiv.style.gap="10px"
 
   gameOverDiv.innerHTML = `<h1>You've Hit ${score/10} Moles!</h1>`;
+  gameOverDiv.innerHTML += `BEST SCORE : ${bestScore}`;
   gameOverDiv.innerHTML += "<button class='backBtn'>Back</button>";
 
   
