@@ -144,7 +144,7 @@ function selectChamp(){
 function displayGameOverWin(){
   bestScore=localStorage.getItem("bestScore");
   moleNumScore = score/10;
-  if(bestScore=='undefined'){
+  if(bestScore==undefined){
     bestScore = 0;
   }
 
@@ -185,7 +185,7 @@ function displayGameOverWin(){
 function displayFinalWin(){
   bestScore=localStorage.getItem("bestScore");
   moleNumScore = score/10;
-  if(bestScore=='undefined'){
+  if(bestScore==undefined){
     bestScore = 0;
   }
 
