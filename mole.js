@@ -157,6 +157,8 @@ function displayGameOverWin(){
     gameOverWindow.className="gameOverWindow";
     gameOverWindow.style.display="flex";
     gameOverWindow.style.transition="4s";
+    gameOverWindow.style.zIndex = "9999";
+    gameOverWindow.style.cursor="default";
 
     let gameOverDiv = document.createElement("div");
     gameOverDiv.style.display="flex";
@@ -164,7 +166,7 @@ function displayGameOverWin(){
     gameOverDiv.style.gap="10px"
 
     gameOverDiv.innerHTML = "<h1>GAME OVER!</h1>";
-    gameOverDiv.innerHTML = `<h1>You've Hit ${moleNumScore} Moles!</h1>`;
+    gameOverDiv.innerHTML += `<h3 class="padding-bottom:2px;">You've Hit ${moleNumScore} Moles!</h3>`;
     gameOverDiv.innerHTML += `BEST SCORE : ${bestScore}`;
     gameOverDiv.innerHTML += "<button class='backBtn'>Back</button>";
 
@@ -198,6 +200,8 @@ function displayFinalWin(){
   gameOverWindow.className="gameOverWindow";
   gameOverWindow.style.display="flex";
   gameOverWindow.style.transition="4s";
+  gameOverWindow.style.zIndex = "9999";
+  gameOverWindow.style.cursor="default";
 
   let gameOverDiv = document.createElement("div");
   gameOverDiv.style.display="flex";
