@@ -205,7 +205,7 @@ function displayFinalWin(){
   gameOverDiv.style.gap="10px"
 
   gameOverDiv.innerHTML = `<h1>You've Hit ${moleNumScore} Moles!</h1>`;
-  gameOverDiv.innerHTML += `BEST SCORE : ${bestScore}`;
+  gameOverDiv.innerHTML += `BEST SCORE : ${localStorage.getItem("bestScore")}`;
   gameOverDiv.innerHTML += "<button class='backBtn'>Back</button>";
 
   
