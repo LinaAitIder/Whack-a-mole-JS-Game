@@ -2,7 +2,8 @@
 let currentMole;
 let currentChamp;
 let moleNumScore;
-let bestScore;
+let latestBestScore;
+let currentBestScore;
 let score = 0;
 const startingMinutes= 1;
 let time =  startingMinutes*60;
@@ -13,7 +14,8 @@ var gameOverAudio = new Audio('assets/game-over.mp3');
 var treeAudio = new Audio('assets/tree-shaking.wav');
 var trumphAudio = new Audio('assets/achievement.mp3');
 var lostAudio = new Audio('assets/lost.mp3');
-var refreshIntervalId ;
+let refreshIntervalCounterId ;
+let refreshIntervalMoleDisplayId;
 
 
 
@@ -48,8 +50,8 @@ function initiateGame(){
   startAudio.play();
   document.body.style.cursor="none";
   createBoard();
-  setInterval(countDownTimer, 1000);
-  setInterval(randomMoleDisplay,2000);  
+  refreshIntervalCounterId =setInterval(countDownTimer, 1000);
+  refreshIntervalMoleDisplayId=setInterval(randomMoleDisplay,2000);  
 }
 
 //Creating the board
@@ -131,7 +133,7 @@ function selectMole(){
 //selecting the champ
 function selectChamp(){
   if(score == 0){
-    displayGameOverWin();
+    handlingBestScore(displayOverlay);
   } else {
     lostAudio.play();
     score -= 10;
@@ -140,90 +142,49 @@ function selectChamp(){
 
 }
 
-//gameOver function
-function displayGameOverWin(){
-  bestScore=localStorage.getItem("bestScore");
+//Handling the bestscore logic
+function handlingBestScore(){
+  latestBestScore=localStorage.getItem("bestScore");
   moleNumScore = score/10;
-  if(bestScore==undefined){
-    bestScore = 0;
-  }
-
-  if(moleNumScore>bestScore){
+  if(latestBestScore == null){
+    currentBestScore = moleNumScore;
+    localStorage.setItem("bestScore", moleNumScore);
+  } else if(moleNumScore>latestBestScore){
     localStorage.setItem("bestScore",moleNumScore);
+    currentBestScore = moleNumScore;
+  } else if (moleNumScore<latestBestScore){
+      currentBestScore = latestBestScore;
   }
-
-    gameOverAudio.play();
-    let gameOverWindow = document.createElement("div");
-    gameOverWindow.className="gameOverWindow";
-    gameOverWindow.style.display="flex";
-    gameOverWindow.style.transition="4s";
-    gameOverWindow.style.zIndex = "9999";
-    gameOverWindow.style.cursor="default";
-
-    let gameOverDiv = document.createElement("div");
-    gameOverDiv.style.display="flex";
-    gameOverDiv.style.flexDirection="column";
-    gameOverDiv.style.gap="10px"
-
-    gameOverDiv.innerHTML = "<h1>GAME OVER!</h1>";
-    gameOverDiv.innerHTML += `<h3 class="padding-bottom:2px;">You've Hit ${moleNumScore} Moles!</h3>`;
-    gameOverDiv.innerHTML += `BEST SCORE : ${bestScore}`;
-    gameOverDiv.innerHTML += "<button class='backBtn'>Back</button>";
-
-    
-    gameOverWindow.appendChild(gameOverDiv);
-    document.body.appendChild(gameOverWindow);
-
-    let backBtn = document.querySelector('.backBtn');
-    backBtn.addEventListener("click",()=>{
-      location.reload();
-    });
-
-    //Reinitiate Timer
-    clearInterval(refreshIntervalId);
 }
 
-//display final window
-function displayFinalWin(){
-  bestScore=localStorage.getItem("bestScore");
-  moleNumScore = score/10;
-  if(bestScore==undefined){
-    bestScore = 0;
-  }
 
-  if(moleNumScore>bestScore){
-    localStorage.setItem("bestScore",moleNumScore);
-  }
-
+//displayOverlay func
+function displayOverlay(){
   gameOverAudio.play();
-  let gameOverWindow = document.createElement("div");
-  gameOverWindow.className="gameOverWindow";
-  gameOverWindow.style.display="flex";
-  gameOverWindow.style.transition="4s";
-  gameOverWindow.style.zIndex = "9999";
-  gameOverWindow.style.cursor="default";
-
-  let gameOverDiv = document.createElement("div");
-  gameOverDiv.style.display="flex";
-  gameOverDiv.style.flexDirection="column";
-  gameOverDiv.style.gap="10px"
-
-  gameOverDiv.innerHTML = `<h1>You've Hit ${moleNumScore} Moles!</h1>`;
-  gameOverDiv.innerHTML += `BEST SCORE : ${localStorage.getItem("bestScore")}`;
-  gameOverDiv.innerHTML += "<button class='backBtn'>Back</button>";
-
+  let gameEndedWindow = document.createElement("div");
+  let windowContent = document.createElement("div");
   
-  gameOverWindow.appendChild(gameOverDiv);
-  document.body.appendChild(gameOverWindow);
+  gameEndedWindow.className="endGameWindow";
+  windowContent.className="windowContent";
+ 
+  windowContent.innerHTML = `<h1>You've Hit ${moleNumScore} Moles!</h1>`;
+  windowContent.innerHTML += `BEST SCORE : ${currentBestScore}`;
+  windowContent.innerHTML += "<button class='restartBtn'>Restart</button>";
+  
+  gameEndedWindow.appendChild(windowContent);
+  document.body.appendChild(gameEndedWindow);
 
-  let backBtn = document.querySelector('.backBtn');
-  backBtn.addEventListener("click",()=>{
+  let restartBtn = document.querySelector('.restartBtn');
+  restartBtn.addEventListener("click",()=>{
     location.reload();
   });
 
   //Reinitiate Timer
-  clearInterval(refreshIntervalId);
+  clearInterval(refreshIntervalCounterId);
+  clearInterval(refreshIntervalMoleDisplayId)
+  
 }
+
 //Verify we can get to the cursor element
 if(!cursor){
   console.log("cursor element not detected");
@@ -263,7 +224,8 @@ function countDownTimer(){
   timer.innerHTML= `0${minutes}:${seconds}`;
   time--;
   if(seconds==0 && minutes==0){
-    displayFinalWin();
+    displayOverlay();
   }
 }
+
 

@@ -105,19 +105,6 @@ img{
   position : relative;
 }
 
-.gameOverWindow{
-  position:absolute;
-  background-color:rgb(141, 146, 141);
-  width: 100%;
-  height:100%;
-  top:0;
-  left:0;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  display: none;
-}
-
 .initialWindow {
   position:absolute;
   background-color:rgb(141, 146, 141);
@@ -141,6 +128,19 @@ img{
   border-radius: 25px;
   padding : 2px;
   box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+}
+
+.restartBtn{
+  background-color :rgb(8, 31, 101 , 0.5);
+  color:rgb(253, 253, 253) !important;
+  width: 100px;
+  height:50px;
+  border:0;
+  border-radius: 25px;
+  padding : 2px;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+  cursor: pointer;
+
 }
 
 .playBtn:hover {
@@ -181,4 +181,27 @@ img{
   left: 50%;
   transform: translate(-50%,0%); 
 
+}
+
+.endGameWindow{
+  display : flex;
+  transition : 4s;
+  z-index : 9999 ;
+  cursor : default
+}
+
+.windowContent{
+  position:absolute;
+  background-color:rgb(141, 146, 141);
+  width: 100%;
+  height:100%;
+  top:0;
+  left:0;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  display: none;
+  display:flex;
+  flex-direction: column;
+  gap : 10px;
 }
