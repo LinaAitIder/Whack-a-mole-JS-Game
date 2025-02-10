@@ -133,7 +133,7 @@ function selectMole(){
 //selecting the champ
 function selectChamp(){
   if(score == 0){
-    handlingBestScore(displayOverlay);
+    displayOverlay();
   } else {
     lostAudio.play();
     score -= 10;
@@ -160,6 +160,7 @@ function handlingBestScore(){
 
 //displayOverlay func
 function displayOverlay(){
+  handlingBestScore()
   gameOverAudio.play();
   let gameEndedWindow = document.createElement("div");
   let windowContent = document.createElement("div");
