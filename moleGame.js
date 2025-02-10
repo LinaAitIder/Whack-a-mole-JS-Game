@@ -23,8 +23,8 @@ let refreshIntervalMoleDisplayId;
 window.onload = function(){
  
  let initialWindow=document.createElement("div");
- let playBtn = document.createElement("btn");
- let  playText = document.createElement("p");
+ let playBtn = document.createElement("button");
+ let playText = document.createElement("p");
 
   initialWindow.className="initialWindow";
   playText.style.fontSize = "20px"
@@ -104,7 +104,6 @@ let randomMoleDisplay = ()=>{
 //Removing the moleImage
 function removeMole(){
   currentMole.innerHTML="";
-
 }
 
 function removeChamp(){
@@ -144,7 +143,7 @@ function selectChamp(){
 
 //Handling the bestscore logic
 function handlingBestScore(){
-  latestBestScore=localStorage.getItem("bestScore");
+  latestBestScore=parseInt(localStorage.getItem("bestScore"));
   moleNumScore = score/10;
   if(latestBestScore == null){
     currentBestScore = moleNumScore;
