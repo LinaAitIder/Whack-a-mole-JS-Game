@@ -149,8 +149,8 @@ function handlingBestScore(){
   latestBestScore = Number.isNaN(storedBestScore) ? 0 : storedBestScore;
   newScore = moleNums * 10;
   if (newScore> latestBestScore) {
-    latestBestScore = moleNums * 10;
-    localStorage.setItem("bestScore", String(moleNums));
+    latestBestScore = newScore;
+    localStorage.setItem("bestScore", latestBestScore);
   }
 
   currentBestScore = latestBestScore;
