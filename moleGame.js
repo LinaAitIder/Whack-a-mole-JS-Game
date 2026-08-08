@@ -1,9 +1,9 @@
 // Some global variables
 let currentMole;
 let currentChamp;
-let moleNumScore;
-let latestBestScore;
-let currentBestScore;
+let moleNumScore = 0;
+let latestBestScore = 0;
+let currentBestScore = 0;
 let score = 0;
 const startingMinutes= 1;
 let time =  startingMinutes*60;
@@ -117,7 +117,8 @@ function randomId(){
 
 //Selecting the mole
 function selectMole(){
-  score +=10;
+  moleNumScore += 1;
+  score = moleNumScore * 10;
   document.getElementById("score").innerText="SCORE: "+score.toString();
   currentMole.innerHTML="";
   let dizzyMoleImg =document.createElement('img');
@@ -131,29 +132,24 @@ function selectMole(){
 
 //selecting the champ
 function selectChamp(){
-  if(score == 0){
-    displayOverlay();
-  } else {
-    lostAudio.play();
-    score -= 10;
-    document.getElementById("score").innerText="SCORE: "+score.toString();
-  }
-
+  lostAudio.play();
+  // Wrong target does not change the mole hit count.
+  // The score is always calculated from the moles hit.
+  currentChamp.innerHTML = "";
 }
 
 //Handling the bestscore logic
 function handlingBestScore(){
-  latestBestScore=parseInt(localStorage.getItem("bestScore"));
-  moleNumScore = score/10;
-  if(latestBestScore == null){
-    currentBestScore = moleNumScore;
-    localStorage.setItem("bestScore", moleNumScore);
-  } else if(moleNumScore>latestBestScore){
-    localStorage.setItem("bestScore",moleNumScore);
-    currentBestScore = moleNumScore;
-  } else if (moleNumScore<latestBestScore){
-      currentBestScore = latestBestScore;
+  const storedBestScore = Number.parseInt(localStorage.getItem("bestScore"), 10);
+
+  latestBestScore = Number.isNaN(storedBestScore) ? 0 : storedBestScore;
+
+  if (moleNumScore > latestBestScore) {
+    latestBestScore = moleNumScore;
+    localStorage.setItem("bestScore", String(moleNumScore));
   }
+
+  currentBestScore = latestBestScore;
 }
 
 
