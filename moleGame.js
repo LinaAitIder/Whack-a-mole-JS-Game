@@ -1,7 +1,7 @@
 // Some global variables
 let currentMole;
 let currentChamp;
-let moleNumScore = 0;
+let moleNums = 0;
 let latestBestScore = 0;
 let currentBestScore = 0;
 let score = 0;
@@ -16,7 +16,7 @@ var trumphAudio = new Audio('assets/achievement.mp3');
 var lostAudio = new Audio('assets/lost.mp3');
 let refreshIntervalCounterId ;
 let refreshIntervalMoleDisplayId;
-
+let gameFinished = false;
 
 
 // Initiate Window
@@ -117,8 +117,8 @@ function randomId(){
 
 //Selecting the mole
 function selectMole(){
-  moleNumScore += 1;
-  score = moleNumScore * 10;
+  moleNums += 1;
+  score = moleNums * 10;
   document.getElementById("score").innerText="SCORE: "+score.toString();
   currentMole.innerHTML="";
   let dizzyMoleImg =document.createElement('img');
@@ -144,9 +144,9 @@ function handlingBestScore(){
 
   latestBestScore = Number.isNaN(storedBestScore) ? 0 : storedBestScore;
 
-  if (moleNumScore > latestBestScore) {
-    latestBestScore = moleNumScore;
-    localStorage.setItem("bestScore", String(moleNumScore));
+  if (moleNums > latestBestScore) {
+    latestBestScore = moleNums;
+    localStorage.setItem("bestScore", String(moleNums));
   }
 
   currentBestScore = latestBestScore;
@@ -155,15 +155,26 @@ function handlingBestScore(){
 
 //displayOverlay func
 function displayOverlay(){
-  handlingBestScore()
+  if (gameFinished) {
+    return;
+  }
+
+  gameFinished = true;
+
+  //Stop both async loops before constructing the overlay.
+  clearInterval(refreshIntervalCounterId);
+  clearInterval(refreshIntervalMoleDisplayId);
+
+  handlingBestScore();
   gameOverAudio.play();
+
   let gameEndedWindow = document.createElement("div");
   let windowContent = document.createElement("div");
   
   gameEndedWindow.className="endGameWindow";
   windowContent.className="windowContent";
  
-  windowContent.innerHTML = `<h1>You've Hit ${moleNumScore} Moles!</h1>`;
+  windowContent.innerHTML = `<h1>You've Hit ${moleNums} Moles!</h1>`;
   windowContent.innerHTML += `BEST SCORE : ${currentBestScore}`;
   windowContent.innerHTML += "<button class='restartBtn'>Restart</button>";
   
@@ -174,11 +185,6 @@ function displayOverlay(){
   restartBtn.addEventListener("click",()=>{
     location.reload();
   });
-
-  //Reinitiate Timer
-  clearInterval(refreshIntervalCounterId);
-  clearInterval(refreshIntervalMoleDisplayId)
-  
 }
 
 //Verify we can get to the cursor element
@@ -207,19 +213,31 @@ rightTree.addEventListener("mouseover",()=>{
 
 //CountDown Timer
 function countDownTimer(){
-  const minutes=Math.floor(time/60);
-  let seconds = time % 60;
-  seconds = seconds<10 ? '0'+seconds : seconds;
-  timer.style.alignItems="center";
-  timer.style.backgroundColor="white";
-  timer.style.color="Black";
-  timer.style.borderRadius="20px";
-  timer.style.padding="10px";
-  timer.style.margin="10px";
-  timer.style.fontSize="20px";
-  timer.innerHTML= `0${minutes}:${seconds}`;
-  time--;
-  if(seconds==0 && minutes==0){
+  if (time <= 0) {
+    displayOverlay();
+    return;
+  }
+
+  const minutes = Math.floor(time / 60);
+  const seconds = time % 60;
+
+  timer.style.alignItems = "center";
+  timer.style.backgroundColor = "white";
+  timer.style.color = "Black";
+  timer.style.borderRadius = "20px";
+  timer.style.padding = "10px";
+  timer.style.margin = "10px";
+  timer.style.fontSize = "20px";
+
+  const displayMinutes = String(minutes).padStart(2, '0');
+  const displaySeconds = String(seconds).padStart(2, '0');
+  timer.innerHTML = `${displayMinutes}:${displaySeconds}`;
+
+  time -= 1;
+
+  if (time <= 0) {
+    time = 0;
+    timer.innerHTML = "00:00";
     displayOverlay();
   }
 }
