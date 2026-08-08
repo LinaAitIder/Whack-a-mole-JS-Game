@@ -56,6 +56,12 @@ function initiateGame(){
 
 //Creating the board
 function createBoard(){
+  let bestScore = localStorage.getItem("bestScore");
+  if (bestScore) {
+    document.getElementById("bestScore").innerText = "BEST SCORE: " + bestScore;
+  } else {
+    document.getElementById("bestScore").innerText = "BEST SCORE: 0";
+  }
   let boardDiv = document.getElementById("board");
   for(let i=0;i<3;i++){
     let childDiv = document.createElement("div");
@@ -126,8 +132,6 @@ function selectMole(){
   dizzyMoleImg.className="dizzyMole";
   currentMole.appendChild(dizzyMoleImg);
   trumphAudio.play();
-
-
 }
 
 //selecting the champ
@@ -143,9 +147,9 @@ function handlingBestScore(){
   const storedBestScore = Number.parseInt(localStorage.getItem("bestScore"), 10);
 
   latestBestScore = Number.isNaN(storedBestScore) ? 0 : storedBestScore;
-
-  if (moleNums > latestBestScore) {
-    latestBestScore = moleNums;
+  newScore = moleNums * 10;
+  if (newScore> latestBestScore) {
+    latestBestScore = moleNums * 10;
     localStorage.setItem("bestScore", String(moleNums));
   }
 
@@ -175,7 +179,8 @@ function displayOverlay(){
   windowContent.className="windowContent";
  
   windowContent.innerHTML = `<h1>You've Hit ${moleNums} Moles!</h1>`;
-  windowContent.innerHTML += `BEST SCORE : ${currentBestScore}`;
+  windowContent.innerHTML += `<p>BEST SCORE : ${currentBestScore}</p>`;
+  windowContent.innerHTML += `<p>YOUR SCORE : ${score}</p>`;
   windowContent.innerHTML += "<button class='restartBtn'>Restart</button>";
   
   gameEndedWindow.appendChild(windowContent);
